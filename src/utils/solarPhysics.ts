@@ -2,7 +2,7 @@ import type { FlareClass, ModelMetrics } from '../types/solar';
 
 // GOES X-ray flux class thresholds (W/m²) — exact, per NOAA/SWPC
 export const FLUX_THRESHOLDS: Record<FlareClass, { min: number; max: number }> = {
-  A: { min: 1e-9, max: 1e-7 },
+  A: { min: 1e-8, max: 1e-7 },
   B: { min: 1e-7, max: 1e-6 },
   C: { min: 1e-6, max: 1e-5 },
   M: { min: 1e-5, max: 1e-4 },
