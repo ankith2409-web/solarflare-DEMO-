@@ -23,7 +23,7 @@ export function Footer() {
           <a
             href="https://github.com/ankith2409-web/solarflare-DEMO-"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-text-secondary hover:text-white border border-space-border rounded-lg transition"
           >
             <Github className="w-3.5 h-3.5" aria-hidden />

@@ -58,7 +58,7 @@ export function Navbar() {
           <a
             href="https://github.com/ankith2409-web/solarflare-DEMO-"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 text-xs text-text-secondary hover:text-white border border-space-border rounded-lg transition"
             aria-label="GitHub repository"
           >
@@ -76,7 +76,7 @@ export function Navbar() {
             type="button"
             className="lg:hidden p-2 text-text-secondary"
             aria-label="Open menu"
-            aria-expanded={open}
+            {...{ 'aria-expanded': open }}
             onClick={() => setOpen(!open)}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

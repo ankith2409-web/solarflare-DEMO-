@@ -47,7 +47,7 @@ export function MethodologySection() {
                 type="button"
                 onClick={() => setOpenIdx(isOpen ? null : i)}
                 className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-white/5 transition"
-                aria-expanded={isOpen}
+                {...{ 'aria-expanded': isOpen }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-solar-cyan/10 flex items-center justify-center flex-shrink-0">
