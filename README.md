@@ -27,14 +27,17 @@ A confidence-weighted ensemble (TSS-calibrated) produces flare class, confidence
 - **Data:** Simulated real-time solar physics (correct W/m² orders of magnitude, log-normal flux distribution, realistic flare morphology)
 - **Fonts:** Space Grotesk (display), Inter (body), JetBrains Mono (telemetry)
 
+## Live Demo
+
+* **Production URL:** [https://solar-flare-dashboard-five.vercel.app](https://solar-flare-dashboard-five.vercel.app)
+* **Alternative URL:** [https://solar-flare-dashboard-ob3pgicr6-ankiths-projects-a3b8a342.vercel.app](https://solar-flare-dashboard-ob3pgicr6-ankiths-projects-a3b8a342.vercel.app)
+
 ## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
-
-Open http://localhost:3000
 
 ## Build
 
