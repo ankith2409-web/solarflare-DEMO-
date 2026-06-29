@@ -5,6 +5,7 @@ import {
   detectActiveFlare,
   generateForecast,
   generateInitialHistory,
+  generateAlertHistory,
 } from '../utils/dataGenerator';
 import { audioAlert } from '../utils/audioAlert';
 import type { FlareEvent } from '../types/solar';
@@ -59,6 +60,10 @@ export function useSimulatedData() {
     const forecast = generateForecast(latestPoint, new Date());
     setForecast(forecast);
     setActiveFlare(null);
+    
+    // Seed alert history with simulated historical events
+    useSolarStore.setState({ alertHistory: generateAlertHistory() });
+    
     setIsLoading(false);
   }, [updateFluxData, setForecast, setActiveFlare]);
 
