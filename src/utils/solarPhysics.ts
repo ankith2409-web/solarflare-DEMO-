@@ -108,8 +108,8 @@ export function calculateHSS(
 
 // Initial model metrics — based on GOES XRS 6-month validation holdout
 export const INITIAL_METRICS: ModelMetrics = {
-  tss: 0.76,
-  hss: 0.68,
+  tss: 0.82,
+  hss: 0.82,
   totalPredictions24h: 1248,
   tssChange: 0.04,
   hssChange: 0.03,
@@ -120,9 +120,9 @@ export const INITIAL_METRICS: ModelMetrics = {
     [5, 26, 162, 12], // Actual M
     [1, 3, 8, 47],    // Actual X
   ],
-  precisionPerClass: [0.86, 0.82, 0.79, 0.91],
-  recallPerClass: [0.89, 0.78, 0.74, 0.86],
-  f1PerClass: [0.875, 0.8, 0.76, 0.88],
+  precisionPerClass: [0.89, 0.83, 0.81, 0.73],
+  recallPerClass: [0.90, 0.82, 0.79, 0.80],
+  f1PerClass: [0.89, 0.83, 0.80, 0.76],
 };
 
 // Map flare class → CSS color (Tailwind text class)
