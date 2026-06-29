@@ -11,8 +11,6 @@ export function Navbar({ onOpenAlertSettings }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const dataSource = useSolarStore((s) => s.dataSource);
-  const setDataSource = useSolarStore((s) => s.setDataSource);
   const alertSettings = useSolarStore((s) => s.alertSettings);
 
   useEffect(() => {
@@ -70,31 +68,7 @@ export function Navbar({ onOpenAlertSettings }: NavbarProps) {
         </ul>
 
         <div className="flex items-center gap-2">
-          {/* Data source selection pills */}
-          <div className="hidden md:flex items-center bg-space-black border border-space-border rounded-full p-0.5 font-mono text-[10px] uppercase mr-1">
-            <button
-              onClick={() => setDataSource('simulation')}
-              className={cn(
-                'px-2.5 py-1 rounded-full transition-all font-bold',
-                dataSource === 'simulation'
-                  ? 'bg-isro-orange text-space-black font-semibold'
-                  : 'text-text-secondary hover:text-white'
-              )}
-            >
-              Sim
-            </button>
-            <button
-              onClick={() => setDataSource('live-noaa')}
-              className={cn(
-                'px-2.5 py-1 rounded-full transition-all font-bold',
-                dataSource === 'live-noaa'
-                  ? 'bg-solar-cyan text-space-black font-semibold'
-                  : 'text-text-secondary hover:text-white'
-              )}
-            >
-              NOAA Live
-            </button>
-          </div>
+
 
           <button
             onClick={onOpenAlertSettings}
@@ -143,30 +117,7 @@ export function Navbar({ onOpenAlertSettings }: NavbarProps) {
 
       {open && (
         <ul className="lg:hidden bg-space-deep border-t border-space-border py-2 space-y-2">
-          {/* Mobile source toggle */}
-          <li className="px-6 py-2 flex items-center justify-between border-b border-space-border/50">
-            <span className="text-xs font-mono text-text-secondary">DATA SOURCE</span>
-            <div className="flex bg-space-black border border-space-border rounded-full p-0.5 font-mono text-[9px] uppercase">
-              <button
-                onClick={() => setDataSource('simulation')}
-                className={cn(
-                  'px-2 py-0.5 rounded-full transition-all font-bold',
-                  dataSource === 'simulation' ? 'bg-isro-orange text-space-black' : 'text-text-secondary'
-                )}
-              >
-                Sim
-              </button>
-              <button
-                onClick={() => setDataSource('live-noaa')}
-                className={cn(
-                  'px-2 py-0.5 rounded-full transition-all font-bold',
-                  dataSource === 'live-noaa' ? 'bg-solar-cyan text-space-black' : 'text-text-secondary'
-                )}
-              >
-                NOAA
-              </button>
-            </div>
-          </li>
+
           <li className="px-6 py-2 border-b border-space-border/50">
             <button
               onClick={() => {

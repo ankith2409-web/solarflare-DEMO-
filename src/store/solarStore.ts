@@ -32,7 +32,6 @@ export const useSolarStore = create<SolarStore>((set) => ({
   metrics: INITIAL_METRICS,
   isLive: true,
   lastUpdated: new Date(),
-  dataSource: 'simulation',
   alertSettings: loadAlertSettings(),
   addFluxPoint: (point) =>
     set((state) => ({
@@ -46,7 +45,6 @@ export const useSolarStore = create<SolarStore>((set) => ({
     set((state) => ({
       alertHistory: [flare, ...state.alertHistory.slice(0, 49)],
     })),
-  setDataSource: (dataSource) => set({ dataSource }),
   updateFluxData: (fluxData) =>
     set({
       fluxData,

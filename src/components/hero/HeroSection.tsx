@@ -10,8 +10,6 @@ export function HeroSection() {
   const activeFlare = useSolarStore((s) => s.activeFlare);
   const lastUpdated = useSolarStore((s) => s.lastUpdated);
   const alertHistory = useSolarStore((s) => s.alertHistory);
-  const dataSource = useSolarStore((s) => s.dataSource);
-
   const soLEXSLive = formatFluxSci(currentFlux?.soLEXS ?? 2.34e-6);
   const hel1OSLive = formatFluxSci(currentFlux?.hel1OS ?? 1.12e-7);
 
@@ -29,8 +27,8 @@ export function HeroSection() {
   }
 
   const tickerItems = [
-    { icon: '●', label: dataSource === 'live-noaa' ? 'GOES XRS-B (LONG)' : 'SoLEXS LIVE', value: soLEXSLive, unit: 'W/m²', color: 'text-solar-cyan' },
-    { icon: '●', label: dataSource === 'live-noaa' ? 'GOES XRS-A (SHORT)' : 'HEL1OS LIVE', value: hel1OSLive, unit: 'W/m²', color: 'text-solar-red' },
+    { icon: '●', label: 'SoLEXS LIVE', value: soLEXSLive, unit: 'W/m²', color: 'text-solar-cyan' },
+    { icon: '●', label: 'HEL1OS LIVE', value: hel1OSLive, unit: 'W/m²', color: 'text-solar-red' },
     { icon: '●', label: 'STATUS', value: 'MONITORING', color: 'text-success-green' },
     { icon: '●', label: 'LAST FLARE', value: lastFlareLabel, color: 'text-isro-amber' },
     { icon: '●', label: 'NEXT PREDICTION', value: '30 MIN', color: 'text-solar-cyan' },
@@ -49,9 +47,9 @@ export function HeroSection() {
           transition={{ duration: 0.8 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <LiveBadge label={dataSource === 'live-noaa' ? 'GOES-18 SATELLITE (NOAA) • LIVE' : 'ADITYA-L1 MISSION • LIVE'} />
+            <LiveBadge label="ADITYA-L1 MISSION • LIVE" />
             <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">
-              {dataSource === 'live-noaa' ? 'NOAA SWPC FEED' : 'ISRO BAH 2026'}
+              ISRO BAH 2026
             </span>
           </div>
 
