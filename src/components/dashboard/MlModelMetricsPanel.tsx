@@ -32,7 +32,7 @@ export function MlModelMetricsPanel() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" id="pipeline">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Col 1: Model Diagnostics & Live Confidence */}
       <div className="solar-card border-l-4 border-l-solar-cyan flex flex-col justify-between">
         <div>

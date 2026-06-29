@@ -12,6 +12,9 @@ import { audioAlert } from '../utils/audioAlert';
 import type { FlareEvent } from '../types/solar';
 
 const triggerAlertNotifications = (flare: FlareEvent, settings: any) => {
+  const threshold = settings.notificationThreshold ?? 'M+';
+  if (threshold === 'X-only' && flare.predictedClass !== 'X') return;
+
   const title = `🚨 SOLAR FLARE ALERT: Class ${flare.predictedClass}${flare.predictedMagnitude.toFixed(1)} Inbound!`;
   const message = `Precursor activity indicates an energetic flare. Est. time to peak: ${flare.timeToPeakMin} min. Confidence: ${(flare.confidence * 100).toFixed(0)}%.`;
 

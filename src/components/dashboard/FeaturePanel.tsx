@@ -99,6 +99,8 @@ function FeatureCard({
   isArea,
   valueFormatter,
 }: FeatureCardProps) {
+  const gradId = `grad-${title.replace(/[^a-zA-Z0-9-]/g, '')}`;
+
   return (
     <div className="solar-card" style={{ borderColor: `${color}30` }}>
       <div className="flex items-center justify-between mb-2">
@@ -113,7 +115,7 @@ function FeatureCard({
           {isArea ? (
             <AreaChart data={data} margin={{ top: 5, right: 5, bottom: 0, left: 0 }}>
               <defs>
-                <linearGradient id={`grad-${title}`} x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor={color} stopOpacity={0.6} />
                   <stop offset="100%" stopColor={color} stopOpacity={0} />
                 </linearGradient>
@@ -145,7 +147,7 @@ function FeatureCard({
                 dataKey={dataKey}
                 stroke={color}
                 strokeWidth={1.5}
-                fill={`url(#grad-${title})`}
+                fill={`url(#${gradId})`}
                 isAnimationActive={false}
               />
             </AreaChart>

@@ -138,7 +138,7 @@ function OrbitRing() {
 
 export function AnimatedSun() {
   return (
-    <div className="w-full h-[420px] relative" aria-label="Animated 3D Sun with corona glow">
+    <div className="w-full h-[420px] relative" role="img" aria-label="Animated 3D Sun with corona glow">
       <Canvas
         camera={{ position: [0, 0, 6.5], fov: 50 }}
         style={{ background: 'transparent' }}

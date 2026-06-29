@@ -19,22 +19,20 @@ interface ToastEntry {
 export function AlertToastHost() {
   const activeFlare = useSolarStore((s) => s.activeFlare);
   const alertHistory = useSolarStore((s) => s.alertHistory);
+  const alertSettings = useSolarStore((s) => s.alertSettings);
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const lastFiredRef = useRef<string | null>(null);
-  const notifPref = useRef<'default' | 'granted' | 'denied'>('default');
-
-  // Mirror browser permission state (so we don't fire system notifications
-  // unless the user explicitly granted them via AlertSimulator)
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('Notification' in window)) return;
-    notifPref.current = Notification.permission as typeof notifPref.current;
-  }, []);
 
   // Watch activeFlare for new M/X events and queue a toast + system notification
   useEffect(() => {
     if (!activeFlare) return;
     const cls = activeFlare.predictedClass;
     if (cls !== 'M' && cls !== 'X') return;
+
+    // Filter by notification threshold
+    const threshold = alertSettings.notificationThreshold ?? 'M+';
+    if (threshold === 'X-only' && cls !== 'X') return;
+
     // De-dupe by predictedClass+magnitude+minute so the same event only fires once
     const key = `${cls}-${activeFlare.predictedMagnitude.toFixed(1)}-${activeFlare.detectedAt.getMinutes()}`;
     if (lastFiredRef.current === key) return;
@@ -48,7 +46,7 @@ export function AlertToastHost() {
     setToasts((prev) => [...prev, entry]);
 
     // Fire browser notification if permission granted
-    if (notifPref.current === 'granted' && 'Notification' in window) {
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
       try {
         // eslint-disable-next-line no-new
         new Notification(`${cls}-class flare detected`, {
@@ -65,7 +63,7 @@ export function AlertToastHost() {
     window.setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== entry.id));
     }, 12_000);
-  }, [activeFlare]);
+  }, [activeFlare, alertSettings]);
 
   function dismiss(id: string) {
     setToasts((prev) => prev.filter((t) => t.id !== id));

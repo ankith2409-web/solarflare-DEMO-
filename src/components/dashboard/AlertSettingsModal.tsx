@@ -95,6 +95,8 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
           <button
             onClick={onClose}
             className="text-text-muted hover:text-white transition p-1 hover:bg-space-mid rounded"
+            aria-label="Close"
+            title="Close"
           >
             <X className="w-5 h-5" />
           </button>
@@ -117,6 +119,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                 checked={alertSettings.audioEnabled}
                 onChange={(e) => setAlertSettings({ audioEnabled: e.target.checked })}
                 className="sr-only peer"
+                aria-label="Audio Warning Siren"
               />
               <div className="w-9 h-5 bg-space-black border border-space-border rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-solar-cyan/80 peer-checked:after:bg-white"></div>
             </label>
@@ -156,6 +159,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   checked={alertSettings.slackEnabled}
                   onChange={(e) => setAlertSettings({ slackEnabled: e.target.checked })}
                   className="sr-only peer"
+                  aria-label="Slack / Discord Webhooks"
                 />
                 <div className="w-9 h-5 bg-space-black border border-space-border rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-solar-cyan/80 peer-checked:after:bg-white"></div>
               </label>
@@ -168,6 +172,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   value={slackUrl}
                   onChange={(e) => setSlackUrl(e.target.value)}
                   className="flex-1 bg-space-black border border-space-border rounded px-3 py-1.5 text-xs text-white font-mono placeholder:text-text-muted focus:outline-none focus:border-solar-cyan"
+                  aria-label="Slack or Discord webhook URL"
                 />
                 <button
                   onClick={handleTestSlack}
@@ -193,6 +198,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   checked={alertSettings.emailEnabled}
                   onChange={(e) => setAlertSettings({ emailEnabled: e.target.checked })}
                   className="sr-only peer"
+                  aria-label="Email Alerts"
                 />
                 <div className="w-9 h-5 bg-space-black border border-space-border rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-solar-cyan/80 peer-checked:after:bg-white"></div>
               </label>
@@ -205,6 +211,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   value={emailAddr}
                   onChange={(e) => setEmailAddr(e.target.value)}
                   className="flex-1 bg-space-black border border-space-border rounded px-3 py-1.5 text-xs text-white font-mono placeholder:text-text-muted focus:outline-none focus:border-solar-cyan"
+                  aria-label="Email Address"
                 />
                 <button
                   onClick={handleTestEmail}
@@ -230,6 +237,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   checked={alertSettings.smsEnabled}
                   onChange={(e) => setAlertSettings({ smsEnabled: e.target.checked })}
                   className="sr-only peer"
+                  aria-label="SMS Alerts"
                 />
                 <div className="w-9 h-5 bg-space-black border border-space-border rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-solar-cyan/80 peer-checked:after:bg-white"></div>
               </label>
@@ -242,6 +250,7 @@ export function AlertSettingsModal({ isOpen, onClose }: AlertSettingsModalProps)
                   value={smsPhone}
                   onChange={(e) => setSmsPhone(e.target.value)}
                   className="flex-1 bg-space-black border border-space-border rounded px-3 py-1.5 text-xs text-white font-mono placeholder:text-text-muted focus:outline-none focus:border-solar-cyan"
+                  aria-label="Phone Number"
                 />
                 <button
                   onClick={handleTestSms}

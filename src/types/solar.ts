@@ -69,6 +69,7 @@ export interface AlertSettings {
   smsEnabled: boolean;
   smsPhoneNumber: string;
   audioEnabled: boolean;
+  notificationThreshold: 'M+' | 'X-only';
 }
 
 export interface SolarStore {

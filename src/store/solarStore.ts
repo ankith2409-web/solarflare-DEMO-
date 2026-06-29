@@ -11,6 +11,7 @@ const DEFAULT_ALERT_SETTINGS: AlertSettings = {
   smsEnabled: false,
   smsPhoneNumber: '',
   audioEnabled: true,
+  notificationThreshold: 'M+',
 };
 
 const loadAlertSettings = (): AlertSettings => {

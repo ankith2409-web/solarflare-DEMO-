@@ -8,7 +8,9 @@ type PermissionState = 'unsupported' | 'default' | 'granted' | 'denied';
 
 export function AlertSimulator() {
   const [open, setOpen] = useState(false);
-  const [threshold, setThreshold] = useState<'M+' | 'X-only'>('M+');
+  const alertSettings = useSolarStore((s) => s.alertSettings);
+  const setAlertSettings = useSolarStore((s) => s.setAlertSettings);
+  const threshold = alertSettings.notificationThreshold ?? 'M+';
   const [permission, setPermission] = useState<PermissionState>('default');
 
   useEffect(() => {
@@ -108,7 +110,7 @@ export function AlertSimulator() {
                       <button
                         key={t}
                         type="button"
-                        onClick={() => setThreshold(t)}
+                        onClick={() => setAlertSettings({ notificationThreshold: t })}
                         className={`px-3 py-2 rounded-lg border text-sm font-mono transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-isro-orange/60 ${
                           threshold === t
                             ? 'border-isro-orange bg-isro-orange/15 text-isro-orange'
