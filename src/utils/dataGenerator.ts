@@ -192,7 +192,14 @@ export function generateNextFluxPoint(
   const dFdtHistory = store.map((d) => d.dFdt);
   const hsRatioHistory = store.map((d) => d.hsRatio);
 
-  const dFdt = store.length > 0 ? (soLEXS - store[store.length - 1].soLEXS) : 0;
+  let dFdt = 0;
+  if (store.length > 0) {
+    const prev = store[store.length - 1];
+    const dtMs = now.getTime() - prev.timestamp.getTime();
+    const dtMin = dtMs / (60 * 1000);
+    const effectiveDtMin = dtMin > 0.016 ? dtMin : 0.1667; // default to 10s if delta is tiny/zero
+    dFdt = (soLEXS - prev.soLEXS) / effectiveDtMin;
+  }
   const hsRatio = soLEXS > 0 ? hel1OS / soLEXS : 0;
 
   // For Z-score, use longer history
@@ -283,7 +290,14 @@ export function generateInitialHistory(now: Date = new Date()): FluxDataPoint[] 
     const hel1OS = computeHel1OSFlux(soLEXS, ts.getTime());
 
     const soLEXSHistory = store.map((d) => d.soLEXS);
-    const dFdt = store.length > 0 ? (soLEXS - store[store.length - 1].soLEXS) : 0;
+    let dFdt = 0;
+    if (store.length > 0) {
+      const prev = store[store.length - 1];
+      const dtMs = ts.getTime() - prev.timestamp.getTime();
+      const dtMin = dtMs / (60 * 1000);
+      const effectiveDtMin = dtMin > 0.016 ? dtMin : 1.0; // default to 1 min for bootstrap
+      dFdt = (soLEXS - prev.soLEXS) / effectiveDtMin;
+    }
     const hsRatio = soLEXS > 0 ? hel1OS / soLEXS : 0;
     const soLEXSValues = soLEXSHistory.slice(-240);
 

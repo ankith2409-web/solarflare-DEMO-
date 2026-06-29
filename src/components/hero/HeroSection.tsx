@@ -55,8 +55,7 @@ export function HeroSection() {
           </div>
 
           <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05] mb-5">
-            India&rsquo;s First Indigenous{' '}
-            <span className="text-gradient-accent">Solar Flare Early Warning System</span>
+            <span className="text-gradient-accent">Solar Flare Warning System</span>
           </h1>
 
           <p className="text-lg text-text-secondary max-w-2xl leading-relaxed mb-8">

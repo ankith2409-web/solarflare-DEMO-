@@ -21,14 +21,12 @@ export function PeakRiseRateChart() {
   const fluxData = useSolarStore((s) => s.fluxData);
   const alertHistory = useSolarStore((s) => s.alertHistory);
 
-  // Compute current rise rate (W/m²/min) from latest dF/dt of SoLEXS
-  // The data points are spaced 1 minute apart, so the diff between the last
-  // two points IS already the per-minute rise rate.
+  // Compute current rise rate (W/m²/min) from latest dF/dt of SoLEXS.
+  // The store's dFdt is already dynamically scaled to per-minute rate.
   const currentRate = useMemo(() => {
-    if (fluxData.length < 2) return 0;
+    if (fluxData.length === 0) return 0;
     const latest = fluxData[fluxData.length - 1];
-    const prev = fluxData[fluxData.length - 2];
-    return Math.max(0, latest.soLEXS - prev.soLEXS);
+    return Math.max(0, latest.dFdt);
   }, [fluxData]);
 
   const historyRates = useMemo(() => getPeakRiseRates(alertHistory), [alertHistory]);
