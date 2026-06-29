@@ -21,9 +21,12 @@ import { LiveBadge } from './components/ui/LiveBadge';
 import { useSimulatedData } from './hooks/useSimulatedData';
 import { useSolarStore } from './store/solarStore';
 import { formatUTCLong } from './utils/solarPhysics';
+import { AlertSettingsModal } from './components/dashboard/AlertSettingsModal';
+import { MlModelMetricsPanel } from './components/dashboard/MlModelMetricsPanel';
 
 function App() {
   useSimulatedData();
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
 
   // Lock scroll restoration
   useEffect(() => {
@@ -44,7 +47,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-space-black text-text-primary">
-      <Navbar />
+      <Navbar onOpenAlertSettings={() => setIsAlertModalOpen(true)} />
 
       <HeroSection />
       <SolarCycleBanner />
@@ -107,12 +110,15 @@ function App() {
       {/* Section 3: Feature Intelligence */}
       <section id="features" className="py-12 lg:py-16 px-4 lg:px-8 max-w-7xl mx-auto border-t border-space-border">
         <div className="mb-6">
-          <h2 className="font-display font-bold text-2xl text-white">Real-time Feature Engineering</h2>
+          <h2 className="font-display font-bold text-2xl text-white">Real-time Feature Engineering & ML Diagnostics</h2>
           <p className="text-sm text-text-secondary mt-1">
-            What our TCN sees — engineered signals feeding the nowcaster
+            Engineered signals and forecasting diagnostics driving the predictive model
           </p>
         </div>
-        <FeaturePanel />
+        <div className="space-y-6">
+          <FeaturePanel />
+          <MlModelMetricsPanel />
+        </div>
       </section>
 
       {/* Section 4: Alert History */}
@@ -158,6 +164,9 @@ function App() {
 
       {/* Top-of-screen flare alert toasts — slides in when a new M/X flare is detected */}
       <AlertToastHost />
+
+      {/* Alert Settings Modal */}
+      <AlertSettingsModal isOpen={isAlertModalOpen} onClose={() => setIsAlertModalOpen(false)} />
     </div>
   );
 }

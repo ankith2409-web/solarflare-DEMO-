@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSolarStore } from '../store/solarStore';
 import {
   generateNextFluxPoint,
@@ -7,68 +7,165 @@ import {
   generateInitialHistory,
   generateAlertHistory,
 } from '../utils/dataGenerator';
+import { fetchNoaaXrayFlux } from '../utils/noaaService';
+import { audioAlert } from '../utils/audioAlert';
+import type { FlareEvent } from '../types/solar';
 
-/**
- * Drives the simulated real-time data feed.
- * - On mount: bootstraps 4 hours of history
- * - Every 10s: appends a new FluxDataPoint, updates forecast
- * - When flare detected: triggers ActiveFlareCard UI
- */
+const triggerAlertNotifications = (flare: FlareEvent, settings: any) => {
+  const title = `🚨 SOLAR FLARE ALERT: Class ${flare.predictedClass}${flare.predictedMagnitude.toFixed(1)} Inbound!`;
+  const message = `Precursor activity indicates an energetic flare. Est. time to peak: ${flare.timeToPeakMin} min. Confidence: ${(flare.confidence * 100).toFixed(0)}%.`;
+
+  // Audio Siren
+  if (settings.audioEnabled) {
+    audioAlert.playSiren();
+  }
+
+  // Browser Notification
+  if (settings.browserEnabled && 'Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, { body: message, icon: '/sun.svg' });
+  }
+
+  // Webhook Integration
+  if (settings.slackEnabled && settings.slackWebhookUrl) {
+    fetch(settings.slackWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: `*${title}*\n${message}\n_Solar Flare Warning System_`
+      }),
+      mode: 'no-cors' // bypass CORS restriction on webhook endpoints
+    }).catch((err) => console.error('Slack Webhook post failed:', err));
+  }
+};
+
 export function useSimulatedData() {
   const addFluxPoint = useSolarStore((s) => s.addFluxPoint);
   const setActiveFlare = useSolarStore((s) => s.setActiveFlare);
   const setForecast = useSolarStore((s) => s.setForecast);
   const addToHistory = useSolarStore((s) => s.addToHistory);
+  
   const isLive = useSolarStore((s) => s.isLive);
+  const dataSource = useSolarStore((s) => s.dataSource);
+  const updateFluxData = useSolarStore((s) => s.updateFluxData);
 
+  const [isLoading, setIsLoading] = useState(false);
   const intervalRef = useRef<number | null>(null);
-  const initialized = useRef(false);
 
-  // Bootstrap 4-hour history once on mount
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
+    let active = true;
+    setIsLoading(true);
 
-    // Bootstrap 4-hour history
-    const history = generateInitialHistory();
-    useSolarStore.setState({ fluxData: history, currentFlux: history[history.length - 1] ?? null });
-    useSolarStore.setState({ alertHistory: generateAlertHistory() });
-    const forecast = generateForecast(history[history.length - 1] ?? null, new Date());
-    setForecast(forecast);
-  }, [setForecast]);
-
-  // Real-time tick loop — only re-creates the interval when `isLive` flips,
-  // NOT on every flare event (which would cause the cadence to drift).
-  useEffect(() => {
-    if (!isLive) return;
-
-    intervalRef.current = window.setInterval(() => {
-      const currentStore = useSolarStore.getState();
-      const point = generateNextFluxPoint(currentStore.fluxData, new Date());
-      addFluxPoint(point);
-
-      // Detect flare — read current active flare inside the tick to avoid
-      // depending on it (and tearing down + recreating the interval)
-      const currentActive = currentStore.activeFlare;
-      const flare = detectActiveFlare(point);
-      if (flare) {
-        if (!currentActive || flare.predictedClass !== currentActive.predictedClass) {
-          setActiveFlare(flare);
-          addToHistory(flare);
+    const bootstrap = async () => {
+      if (dataSource === 'live-noaa') {
+        try {
+          const points = await fetchNoaaXrayFlux();
+          if (!active) return;
+          
+          updateFluxData(points);
+          
+          const latestPoint = points[points.length - 1];
+          if (latestPoint) {
+            const flare = detectActiveFlare(latestPoint);
+            if (flare) {
+              setActiveFlare(flare);
+              addToHistory(flare);
+            } else {
+              setActiveFlare(null);
+            }
+            const forecast = generateForecast(latestPoint, new Date());
+            setForecast(forecast);
+          }
+        } catch (e) {
+          console.error('Error bootstrapping NOAA data, falling back to simulation:', e);
+          if (!active) return;
+          // Fallback to simulation
+          const history = generateInitialHistory();
+          updateFluxData(history);
         }
-      } else if (currentActive) {
+      } else {
+        const history = generateInitialHistory();
+        updateFluxData(history);
+        const latestPoint = history[history.length - 1] ?? null;
+        const forecast = generateForecast(latestPoint, new Date());
+        setForecast(forecast);
         setActiveFlare(null);
       }
+      
+      setIsLoading(false);
+    };
 
-      // Update forecast
-      const forecast = generateForecast(point, new Date());
-      setForecast(forecast);
-    }, 10_000);
+    bootstrap();
+
+    return () => {
+      active = false;
+    };
+  }, [dataSource, updateFluxData, setForecast, setActiveFlare, addToHistory]);
+
+  // Polling / Tick loop
+  useEffect(() => {
+    if (!isLive || isLoading) return;
+
+    const intervalTime = dataSource === 'live-noaa' ? 60_000 : 10_000;
+
+    intervalRef.current = window.setInterval(async () => {
+      const currentStore = useSolarStore.getState();
+      
+      if (dataSource === 'live-noaa') {
+        try {
+          const points = await fetchNoaaXrayFlux();
+          const latestPoint = points[points.length - 1];
+          if (latestPoint) {
+            // Update whole fluxData to keep it fresh
+            updateFluxData(points);
+
+            // Detect flares
+            const currentActive = currentStore.activeFlare;
+            const flare = detectActiveFlare(latestPoint);
+            if (flare) {
+              if (!currentActive || flare.predictedClass !== currentActive.predictedClass) {
+                setActiveFlare(flare);
+                addToHistory(flare);
+                triggerAlertNotifications(flare, currentStore.alertSettings);
+              }
+            } else if (currentActive) {
+              setActiveFlare(null);
+            }
+
+            // Update forecast
+            const forecast = generateForecast(latestPoint, new Date());
+            setForecast(forecast);
+          }
+        } catch (e) {
+          console.error('Error polling NOAA data:', e);
+        }
+      } else {
+        // Simulation mode
+        const point = generateNextFluxPoint(currentStore.fluxData, new Date());
+        addFluxPoint(point);
+
+        // Detect flare
+        const currentActive = currentStore.activeFlare;
+        const flare = detectActiveFlare(point);
+        if (flare) {
+          if (!currentActive || flare.predictedClass !== currentActive.predictedClass) {
+            setActiveFlare(flare);
+            addToHistory(flare);
+            triggerAlertNotifications(flare, currentStore.alertSettings);
+          }
+        } else if (currentActive) {
+          setActiveFlare(null);
+        }
+
+        // Update forecast
+        const forecast = generateForecast(point, new Date());
+        setForecast(forecast);
+      }
+    }, intervalTime);
 
     return () => {
       if (intervalRef.current) window.clearInterval(intervalRef.current);
     };
-  }, [isLive, addFluxPoint, setActiveFlare, addToHistory, setForecast]);
+  }, [isLive, dataSource, isLoading, addFluxPoint, updateFluxData, setActiveFlare, addToHistory, setForecast]);
 
-  return { fluxData: useSolarStore((s) => s.fluxData) };
+  return { isLoading };
 }

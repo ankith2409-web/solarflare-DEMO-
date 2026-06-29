@@ -1,10 +1,19 @@
-import { Satellite, Github, Activity } from 'lucide-react';
+import { Satellite, Github, Activity, Bell } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
+import { useSolarStore } from '../../store/solarStore';
 
-export function Navbar() {
+interface NavbarProps {
+  onOpenAlertSettings: () => void;
+}
+
+export function Navbar({ onOpenAlertSettings }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const dataSource = useSolarStore((s) => s.dataSource);
+  const setDataSource = useSolarStore((s) => s.setDataSource);
+  const alertSettings = useSolarStore((s) => s.alertSettings);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -20,6 +29,12 @@ export function Navbar() {
     { href: '#impact', label: 'Impact' },
     { href: '#pipeline', label: 'Architecture' },
   ];
+
+  const anyAlertsActive =
+    alertSettings.browserEnabled ||
+    alertSettings.slackEnabled ||
+    alertSettings.emailEnabled ||
+    alertSettings.smsEnabled;
 
   return (
     <nav
@@ -55,6 +70,44 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          {/* Data source selection pills */}
+          <div className="hidden md:flex items-center bg-space-black border border-space-border rounded-full p-0.5 font-mono text-[10px] uppercase mr-1">
+            <button
+              onClick={() => setDataSource('simulation')}
+              className={cn(
+                'px-2.5 py-1 rounded-full transition-all font-bold',
+                dataSource === 'simulation'
+                  ? 'bg-isro-orange text-space-black font-semibold'
+                  : 'text-text-secondary hover:text-white'
+              )}
+            >
+              Sim
+            </button>
+            <button
+              onClick={() => setDataSource('live-noaa')}
+              className={cn(
+                'px-2.5 py-1 rounded-full transition-all font-bold',
+                dataSource === 'live-noaa'
+                  ? 'bg-solar-cyan text-space-black font-semibold'
+                  : 'text-text-secondary hover:text-white'
+              )}
+            >
+              NOAA Live
+            </button>
+          </div>
+
+          <button
+            onClick={onOpenAlertSettings}
+            className="p-2 text-text-secondary hover:text-white hover:bg-space-mid rounded-full transition relative mr-1"
+            title="Configure Alert Channels"
+            aria-label="Configure Alert Channels"
+          >
+            <Bell className="w-4 h-4" />
+            {anyAlertsActive && (
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-success-green" />
+            )}
+          </button>
+
           <a
             href="https://github.com/ankith2409-web/solarflare-DEMO-"
             target="_blank"
@@ -89,7 +142,43 @@ export function Navbar() {
       </div>
 
       {open && (
-        <ul className="lg:hidden bg-space-deep border-t border-space-border">
+        <ul className="lg:hidden bg-space-deep border-t border-space-border py-2 space-y-2">
+          {/* Mobile source toggle */}
+          <li className="px-6 py-2 flex items-center justify-between border-b border-space-border/50">
+            <span className="text-xs font-mono text-text-secondary">DATA SOURCE</span>
+            <div className="flex bg-space-black border border-space-border rounded-full p-0.5 font-mono text-[9px] uppercase">
+              <button
+                onClick={() => setDataSource('simulation')}
+                className={cn(
+                  'px-2 py-0.5 rounded-full transition-all font-bold',
+                  dataSource === 'simulation' ? 'bg-isro-orange text-space-black' : 'text-text-secondary'
+                )}
+              >
+                Sim
+              </button>
+              <button
+                onClick={() => setDataSource('live-noaa')}
+                className={cn(
+                  'px-2 py-0.5 rounded-full transition-all font-bold',
+                  dataSource === 'live-noaa' ? 'bg-solar-cyan text-space-black' : 'text-text-secondary'
+                )}
+              >
+                NOAA
+              </button>
+            </div>
+          </li>
+          <li className="px-6 py-2 border-b border-space-border/50">
+            <button
+              onClick={() => {
+                setOpen(false);
+                onOpenAlertSettings();
+              }}
+              className="flex items-center gap-2 text-sm text-text-secondary hover:text-white transition w-full text-left"
+            >
+              <Bell className="w-4 h-4" />
+              Configure Alerts
+            </button>
+          </li>
           {links.map((l) => (
             <li key={l.href}>
               <a

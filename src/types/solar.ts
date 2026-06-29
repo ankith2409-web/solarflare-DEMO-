@@ -60,6 +60,17 @@ export interface ModelMetrics {
   f1PerClass: number[];
 }
 
+export interface AlertSettings {
+  browserEnabled: boolean;
+  slackEnabled: boolean;
+  slackWebhookUrl: string;
+  emailEnabled: boolean;
+  emailAddress: string;
+  smsEnabled: boolean;
+  smsPhoneNumber: string;
+  audioEnabled: boolean;
+}
+
 export interface SolarStore {
   fluxData: FluxDataPoint[];
   currentFlux: FluxDataPoint | null;
@@ -73,4 +84,9 @@ export interface SolarStore {
   setActiveFlare: (flare: FlareEvent | null) => void;
   setForecast: (forecast: ForecastOutput) => void;
   addToHistory: (flare: FlareEvent) => void;
+  dataSource: 'simulation' | 'live-noaa';
+  setDataSource: (source: 'simulation' | 'live-noaa') => void;
+  updateFluxData: (data: FluxDataPoint[]) => void;
+  alertSettings: AlertSettings;
+  setAlertSettings: (settings: Partial<AlertSettings>) => void;
 }
