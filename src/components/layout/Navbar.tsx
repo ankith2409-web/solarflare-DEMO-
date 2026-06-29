@@ -97,7 +97,7 @@ export function Navbar({ onOpenAlertSettings }: NavbarProps) {
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-isro-orange text-space-black text-sm font-bold hover:bg-isro-amber transition"
           >
             <Activity className="w-4 h-4" aria-hidden />
-            Live Dashboard
+            Dashboard
           </a>
           <button
             type="button"

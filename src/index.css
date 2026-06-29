@@ -90,6 +90,22 @@ body {
   50% { transform: scale(1.4); opacity: 0.4; }
 }
 
+/* Sim indicator */
+.sim-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00d4ff;
+  animation: simPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+}
+
+@keyframes simPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.4; }
+}
+
 /* Gradient text */
 .text-gradient-accent {
   background: linear-gradient(135deg, #00d4ff 0%, #ff6b00 100%);

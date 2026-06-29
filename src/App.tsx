@@ -52,18 +52,18 @@ function App() {
       <HeroSection />
       <SolarCycleBanner />
 
-      {/* Section 2: Live Dashboard */}
+      {/* Section 2: Simulated Dashboard */}
       <section id="dashboard" className="py-12 lg:py-16 px-4 lg:px-8 max-w-7xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="font-display font-bold text-2xl lg:text-3xl text-white">
-                Live Solar Monitoring Dashboard
+                Simulated Solar Monitoring Dashboard
               </h2>
-              <LiveBadge label="LIVE" />
+              <LiveBadge label="SIMULATED" />
             </div>
             <p className="text-sm text-text-secondary">
-              Dual-channel X-ray flux · Aditya-L1 SoLEXS + HEL1OS · {todayLabel} · All times UTC
+              Dual-channel X-ray flux · Aditya-L1 SoLEXS + HEL1OS (Simulated) · {todayLabel} · All times UTC
             </p>
           </div>
           <div className="flex items-center gap-2">

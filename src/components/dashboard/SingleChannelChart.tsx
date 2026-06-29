@@ -139,7 +139,7 @@ export function SingleChannelChart({ channel }: SingleChannelChartProps) {
         </div>
         <div className="text-right flex-shrink-0">
           <div className="text-[10px] uppercase tracking-wider text-text-secondary font-mono">
-            Live Value
+            Simulated Value
           </div>
           <div
             className="font-mono font-bold text-xl leading-tight"

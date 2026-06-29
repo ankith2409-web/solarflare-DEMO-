@@ -27,8 +27,8 @@ export function HeroSection() {
   }
 
   const tickerItems = [
-    { icon: '●', label: 'SoLEXS LIVE', value: soLEXSLive, unit: 'W/m²', color: 'text-solar-cyan' },
-    { icon: '●', label: 'HEL1OS LIVE', value: hel1OSLive, unit: 'W/m²', color: 'text-solar-red' },
+    { icon: '●', label: 'SoLEXS (Simulated)', value: soLEXSLive, unit: 'W/m²', color: 'text-solar-cyan' },
+    { icon: '●', label: 'HEL1OS (Simulated)', value: hel1OSLive, unit: 'W/m²', color: 'text-solar-red' },
     { icon: '●', label: 'STATUS', value: 'MONITORING', color: 'text-success-green' },
     { icon: '●', label: 'LAST FLARE', value: lastFlareLabel, color: 'text-isro-amber' },
     { icon: '●', label: 'NEXT PREDICTION', value: '30 MIN', color: 'text-solar-cyan' },
@@ -47,7 +47,7 @@ export function HeroSection() {
           transition={{ duration: 0.8 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <LiveBadge label="ADITYA-L1 MISSION • LIVE" />
+            <LiveBadge label="ADITYA-L1 MISSION • SIMULATED" />
             <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">
               ISRO BAH 2026
             </span>
@@ -58,7 +58,7 @@ export function HeroSection() {
           </h1>
 
           <p className="text-lg text-text-secondary max-w-2xl leading-relaxed mb-8">
-            Real-time M/X-class flare forecasting powered by <span className="text-solar-cyan">SoLEXS</span> +{' '}
+            Real-time M/X-class flare forecasting powered by <span className="text-solar-cyan">SoLEXS</span> +  
             <span className="text-solar-red">HEL1OS</span> dual-channel X-ray analysis. 30-minute advance warnings.
             TSS-calibrated.
           </p>
@@ -74,7 +74,7 @@ export function HeroSection() {
               href="#dashboard"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-isro-orange text-space-black font-bold hover:bg-isro-amber hover:glow-orange transition-all"
             >
-              View Live Dashboard
+              View Simulated Dashboard
               <ArrowRight className="w-4 h-4" aria-hidden />
             </a>
             <a

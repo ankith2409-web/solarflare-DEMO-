@@ -5,18 +5,18 @@ interface LiveBadgeProps {
   className?: string;
 }
 
-export function LiveBadge({ label = 'LIVE', className }: LiveBadgeProps) {
+export function LiveBadge({ label = 'SIMULATED', className }: LiveBadgeProps) {
   return (
     <span
       className={cn(
         'inline-flex items-center gap-2 px-2.5 py-1 rounded-full',
-        'bg-red-500/10 border border-red-500/30 text-red-400',
+        'bg-solar-cyan/10 border border-solar-cyan/30 text-solar-cyan',
         'font-mono text-xs uppercase tracking-wider',
         className
       )}
-      aria-label="Live data feed active"
+      aria-label="Simulated data feed active"
     >
-      <span className="live-dot" />
+      <span className="sim-dot" />
       {label}
     </span>
   );
